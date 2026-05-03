@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ImagePlus, X } from "lucide-react";
+import { Camera, ImagePlus, X } from "lucide-react";
 import { fileToDataUrl } from "@/lib/store";
 
 export function ImageInput({
@@ -14,12 +14,19 @@ export function ImageInput({
   onError: (message: string) => void;
 }) {
   async function handleFile(file?: File) {
-    if (!file) return;
+    if (!file) {
+      onError("Fotograf secilemedi. Telefon tarayici ayarlarindan fotograf/kamera iznini kontrol edin.");
+      return;
+    }
     if (!file.type.startsWith("image/")) {
       onError("Lutfen bir fotograf dosyasi secin.");
       return;
     }
-    onChange(await fileToDataUrl(file));
+    try {
+      onChange(await fileToDataUrl(file));
+    } catch {
+      onError("Fotograf okunamadi. Baska bir fotograf deneyin.");
+    }
   }
 
   return (
@@ -39,19 +46,38 @@ export function ImageInput({
             </button>
           </>
         ) : (
-          <label className="flex min-h-36 w-full cursor-pointer flex-col items-center justify-center gap-2 text-ink/55">
+          <div className="flex min-h-36 w-full flex-col items-center justify-center gap-3 p-4 text-ink/55">
             <ImagePlus size={26} />
-            <span className="text-sm font-semibold">Fotograf yukle</span>
-            <input className="sr-only" type="file" accept="image/*" onChange={(event) => handleFile(event.target.files?.[0])} />
-          </label>
+            <span className="text-sm font-semibold">Fotograf ekle</span>
+            <ImageActions onFile={handleFile} />
+          </div>
         )}
       </div>
       {value ? (
-        <label className="inline-flex min-h-11 cursor-pointer items-center rounded-lg border border-ink/10 bg-white px-4 text-sm font-bold text-ink">
-          Degistir
-          <input className="sr-only" type="file" accept="image/*" onChange={(event) => handleFile(event.target.files?.[0])} />
-        </label>
+        <ImageActions onFile={handleFile} />
       ) : null}
+    </div>
+  );
+}
+
+function ImageActions({ onFile }: { onFile: (file?: File) => void }) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    onFile(event.target.files?.[0]);
+    event.target.value = "";
+  }
+
+  return (
+    <div className="grid w-full grid-cols-2 gap-2">
+      <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-ink/10 bg-white px-3 text-sm font-bold text-ink shadow-soft">
+        <ImagePlus className="mr-2" size={18} />
+        Galeri
+        <input className="sr-only" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/*" onChange={handleChange} />
+      </label>
+      <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-leaf px-3 text-sm font-bold text-white shadow-soft">
+        <Camera className="mr-2" size={18} />
+        Kamera
+        <input className="sr-only" type="file" accept="image/*" capture="environment" onChange={handleChange} />
+      </label>
     </div>
   );
 }
