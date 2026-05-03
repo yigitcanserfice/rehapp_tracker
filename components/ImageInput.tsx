@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Camera, FolderOpen, ImagePlus, X } from "lucide-react";
+import { Camera, ImagePlus, X } from "lucide-react";
 import { fileToDataUrl } from "@/lib/store";
 
 export function ImageInput({
@@ -67,15 +67,10 @@ function ImageActions({ onFile }: { onFile: (file?: File) => void }) {
   }
 
   return (
-    <div className="grid w-full grid-cols-3 gap-2">
+    <div className="grid w-full grid-cols-2 gap-2">
       <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-ink/10 bg-white px-3 text-sm font-bold text-ink shadow-soft">
         <ImagePlus className="mr-2" size={18} />
         Galeri
-        <input className="sr-only" type="file" accept="image/*" onChange={handleChange} />
-      </label>
-      <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-ink/10 bg-white px-3 text-sm font-bold text-ink shadow-soft">
-        <FolderOpen className="mr-2" size={18} />
-        Dosya
         <input className="sr-only" type="file" onChange={handleChange} />
       </label>
       <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-leaf px-3 text-sm font-bold text-white shadow-soft">
