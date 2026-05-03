@@ -71,7 +71,7 @@ function ImageActions({ onFile }: { onFile: (file?: File) => void }) {
       <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-ink/10 bg-white px-3 text-sm font-bold text-ink shadow-soft">
         <ImagePlus className="mr-2" size={18} />
         Galeri
-        <input className="sr-only" type="file" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleChange} />
+        <input className="sr-only" type="file" accept="image/*,text/plain" onChange={handleChange} />
       </label>
       <label className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-leaf px-3 text-sm font-bold text-white shadow-soft">
         <Camera className="mr-2" size={18} />
